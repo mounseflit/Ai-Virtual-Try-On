@@ -1,0 +1,160 @@
+/* Additional UX Enhancements */
+
+/* Smooth transitions for all interactive elements */
+.preset-card,
+.selection-tag,
+.category-tab,
+.btn-icon-text,
+.btn-primary-large {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Focus states for accessibility */
+.category-tab:focus,
+.preset-card:focus,
+.custom-input:focus,
+.btn-primary-large:focus {
+    outline: 3px solid rgba(255,255,255,0.5);
+    outline-offset: 2px;
+}
+
+/* Empty state styling */
+.selection-tags-list:empty::after {
+    content: 'No selections yet. Pick items from the editor!';
+    display: block;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* Loading state for preset cards */
+.preset-card.loading {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+/* Hover effects enhancement */
+.preset-card:hover .preset-icon {
+    transform: scale(1.15);
+    transition: transform 0.2s ease;
+}
+
+.selection-tag:hover .tag-remove {
+    transform: scale(1.2) rotate(90deg);
+}
+
+/* Active state for buttons */
+.btn-primary-large:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(238,90,36,0.3);
+}
+
+/* Tooltip for preset cards */
+.preset-card::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.9);
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    margin-bottom: 0.5rem;
+}
+
+.preset-card:hover::after {
+    opacity: 1;
+}
+
+/* Badge animation */
+.selected-badge {
+    animation: badgePop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes badgePop {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Custom scrollbar for better UX */
+.tab-panel::-webkit-scrollbar,
+.selection-tags-list::-webkit-scrollbar,
+.category-tabs::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.tab-panel::-webkit-scrollbar-track,
+.selection-tags-list::-webkit-scrollbar-track,
+.category-tabs::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.05);
+    border-radius: 4px;
+}
+
+.tab-panel::-webkit-scrollbar-thumb,
+.selection-tags-list::-webkit-scrollbar-thumb,
+.category-tabs::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.25);
+    border-radius: 4px;
+}
+
+.tab-panel::-webkit-scrollbar-thumb:hover,
+.selection-tags-list::-webkit-scrollbar-thumb:hover,
+.category-tabs::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.35);
+}
+
+/* Grid auto-sizing for different screen densities */
+@media (min-width: 1200px) {
+    .presets-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .presets-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .category-tab {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+    }
+    
+    .category-tab .tab-emoji {
+        font-size: 1rem;
+    }
+}
+
+/* Print styles */
+@media print {
+    .character-container-modern {
+        display: block;
+    }
+    
+    .editor-panel {
+        display: none;
+    }
+    
+    .avatar-panel {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+}

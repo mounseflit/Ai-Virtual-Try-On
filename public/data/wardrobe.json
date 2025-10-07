@@ -1,0 +1,394 @@
+{
+  "categories": [
+    {
+      "id": "lower-body",
+      "label": "Lower Body",
+      "emoji": "👖",
+      "description": "Pants, jeans, skirts, shorts",
+      "items": [
+        {
+          "id": "blue-jeans",
+          "name": "Blue Jeans",
+          "image": "https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing classic medium wash blue denim jeans with straight leg fit and subtle fading, full body view"
+        },
+        {
+          "id": "black-pants",
+          "name": "Black Pants",
+          "image": "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing elegant black dress pants with tailored slim fit and creased front, professional style"
+        },
+        {
+          "id": "khaki-chinos",
+          "name": "Khaki Chinos",
+          "image": "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing khaki beige chino pants with straight leg cut and belt loops, casual smart style"
+        },
+        {
+          "id": "joggers",
+          "name": "Grey Joggers",
+          "image": "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing heather grey athletic joggers with elastic waistband, drawstring, and tapered ankles"
+        },
+        {
+          "id": "cargo-pants",
+          "name": "Cargo Pants",
+          "image": "https://images.unsplash.com/photo-1555689502-c4b22d76c56f?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing olive green cargo pants with multiple large side pockets and relaxed fit, utility style"
+        }
+      ]
+    },
+    {
+      "id": "upper-body",
+      "label": "Upper Body",
+      "emoji": "👕",
+      "description": "Shirts, t-shirts, tops, blouses",
+      "items": [
+        {
+          "id": "white-tshirt",
+          "name": "White T-Shirt",
+          "image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing plain white cotton crew neck t-shirt with short sleeves, clean and simple casual style"
+        },
+        {
+          "id": "black-tee",
+          "name": "Black Tee",
+          "image": "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing solid black fitted crew neck t-shirt with short sleeves, modern minimalist style"
+        },
+        {
+          "id": "button-shirt",
+          "name": "Button Shirt",
+          "image": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing crisp white button-up dress shirt with long sleeves and collar, formal business style"
+        },
+        {
+          "id": "hoodie",
+          "name": "Grey Hoodie",
+          "image": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing heather grey pullover hoodie with drawstring hood, kangaroo pocket, and ribbed cuffs"
+        },
+        {
+          "id": "polo-shirt",
+          "name": "Polo Shirt",
+          "image": "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing navy blue polo shirt with collar, button placket, and short sleeves, smart casual style"
+        },
+        {
+          "id": "striped-tee",
+          "name": "Striped Tee",
+          "image": "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing horizontal black and white striped t-shirt with crew neck, classic nautical style"
+        },
+        {
+          "id": "graphic-tee",
+          "name": "Graphic Tee",
+          "image": "https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing vintage style graphic print t-shirt with retro design and faded colors, streetwear style"
+        }
+      ]
+    },
+    {
+      "id": "outerwear",
+      "label": "Outerwear",
+      "emoji": "🧥",
+      "description": "Jackets, coats, blazers",
+      "items": [
+        {
+          "id": "denim-jacket",
+          "name": "Denim Jacket",
+          "image": "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing classic blue denim jacket with button front, chest pockets, and slightly faded wash, casual layering style"
+        },
+        {
+          "id": "leather-jacket",
+          "name": "Leather Jacket",
+          "image": "https://images.unsplash.com/photo-1520975954732-35dd22299614?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing black leather biker jacket with asymmetric zipper closure, lapel collar, and multiple zippers, edgy rock style"
+        },
+        {
+          "id": "bomber-jacket",
+          "name": "Bomber Jacket",
+          "image": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing olive green bomber jacket with ribbed cuffs and hem, front zipper, and casual sporty fit"
+        },
+        {
+          "id": "zip-hoodie",
+          "name": "Zip Hoodie",
+          "image": "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing grey full-zip hoodie jacket with hood, two side pockets, and athletic comfortable fit"
+        },
+        {
+          "id": "trench-coat",
+          "name": "Trench Coat",
+          "image": "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing beige classic trench coat with double-breasted buttons, belt, and knee-length cut, sophisticated elegant style"
+        }
+      ]
+    },
+    {
+      "id": "footwear",
+      "label": "Footwear",
+      "emoji": "👟",
+      "description": "Shoes, sneakers, boots, heels",
+      "items": [
+        {
+          "id": "white-sneakers",
+          "name": "White Sneakers",
+          "image": "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing clean white canvas sneakers with laces and rubber sole, classic casual footwear style"
+        },
+        {
+          "id": "black-boots",
+          "name": "Black Boots",
+          "image": "https://images.unsplash.com/photo-1542840410-3092f99611a3?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing black leather ankle boots with side zipper and low heel, versatile urban footwear"
+        },
+        {
+          "id": "running-shoes",
+          "name": "Running Shoes",
+          "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing athletic running shoes with breathable mesh upper, cushioned sole, and sporty design"
+        },
+        {
+          "id": "dress-shoes",
+          "name": "Dress Shoes",
+          "image": "https://images.unsplash.com/photo-1533867617858-e7b97e060509?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing polished black oxford dress shoes with laces and smooth leather finish, formal business footwear"
+        },
+        {
+          "id": "sandals",
+          "name": "Sandals",
+          "image": "https://images.unsplash.com/photo-1603487742131-4160ec999306?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing brown leather sandals with adjustable straps and comfortable footbed, casual summer footwear"
+        },
+        {
+          "id": "high-heels",
+          "name": "High Heels",
+          "image": "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing black stiletto high heels with pointed toe and 4-inch heel, elegant formal footwear"
+        },
+        {
+          "id": "loafers",
+          "name": "Loafers",
+          "image": "https://images.unsplash.com/photo-1582897085656-c636d006a246?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing brown leather penny loafers with slip-on design and flat heel, smart casual footwear"
+        }
+      ]
+    },
+    {
+      "id": "eyewear",
+      "label": "Eyewear",
+      "emoji": "👓",
+      "description": "Sunglasses, glasses, frames",
+      "items": [
+        {
+          "id": "sunglasses",
+          "name": "Aviators",
+          "image": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing classic aviator sunglasses with gold metal frame and dark tinted lenses, cool confident style"
+        },
+        {
+          "id": "clear-glasses",
+          "name": "Clear Frames",
+          "image": "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing modern clear transparent frame eyeglasses with rectangular shape, intellectual professional look"
+        },
+        {
+          "id": "cat-eye",
+          "name": "Cat Eye",
+          "image": "https://images.unsplash.com/photo-1577803645773-f96470509666?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing vintage cat-eye frame glasses with upswept corners and bold black frames, retro chic style"
+        },
+        {
+          "id": "sport-glasses",
+          "name": "Sport Glasses",
+          "image": "https://images.unsplash.com/photo-1508296695146-257a814070b4?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing athletic wrap-around sport sunglasses with curved frame and mirrored lenses, active performance style"
+        },
+        {
+          "id": "wayfarer",
+          "name": "Wayfarer",
+          "image": "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing classic black wayfarer sunglasses with thick frame and dark lenses, timeless cool style"
+        }
+      ]
+    },
+    {
+      "id": "headwear",
+      "label": "Headwear",
+      "emoji": "🧢",
+      "description": "Hats, caps, beanies",
+      "items": [
+        {
+          "id": "baseball-cap",
+          "name": "Baseball Cap",
+          "image": "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing black baseball cap with curved brim, adjustable strap, and classic sporty casual style"
+        },
+        {
+          "id": "beanie",
+          "name": "Beanie",
+          "image": "https://images.unsplash.com/photo-1576871337622-98d48d1cf531?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing grey knit beanie hat with folded cuff, warm winter accessory, casual cozy style"
+        },
+        {
+          "id": "fedora",
+          "name": "Fedora",
+          "image": "https://images.unsplash.com/photo-1514327605112-b887c0e61c0a?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing brown wool fedora hat with black ribbon band and center crease, sophisticated vintage style"
+        },
+        {
+          "id": "snapback",
+          "name": "Snapback",
+          "image": "https://images.unsplash.com/photo-1575428652377-a2d80e2277fc?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing streetwear snapback cap with flat brim and adjustable snap closure, urban hip-hop style"
+        },
+        {
+          "id": "sun-hat",
+          "name": "Sun Hat",
+          "image": "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing wide-brim straw sun hat with ribbon band, elegant beach vacation resort style"
+        }
+      ]
+    },
+    {
+      "id": "accessories",
+      "label": "Accessories",
+      "emoji": "💎",
+      "description": "Jewelry, watches, scarves",
+      "items": [
+        {
+          "id": "watch",
+          "name": "Silver Watch",
+          "image": "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing silver wristwatch with round face, brown leather strap, and classic elegant timepiece design"
+        },
+        {
+          "id": "necklace",
+          "name": "Gold Chain",
+          "image": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing gold chain necklace with medium thickness links, elegant subtle jewelry piece"
+        },
+        {
+          "id": "bracelet",
+          "name": "Leather Bracelet",
+          "image": "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing brown leather wrap bracelet with multiple straps and metal clasp, casual rugged accessory"
+        },
+        {
+          "id": "earrings",
+          "name": "Hoop Earrings",
+          "image": "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing medium silver hoop earrings with smooth polished finish, classic elegant jewelry"
+        },
+        {
+          "id": "ring",
+          "name": "Gold Ring",
+          "image": "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing gold statement ring with wide band and polished finish, bold fashion jewelry piece"
+        },
+        {
+          "id": "scarf",
+          "name": "Silk Scarf",
+          "image": "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=400&h=400&fit=crop&q=80",
+          "prompt": "wearing colorful patterned silk scarf around neck, elegant flowing accessory with vibrant design"
+        }
+      ]
+    },
+    {
+      "id": "bags",
+      "label": "Bags",
+      "emoji": "👜",
+      "description": "Backpacks, handbags, totes",
+      "items": [
+        {
+          "id": "backpack",
+          "name": "Backpack",
+          "image": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop&q=80",
+          "prompt": "carrying black leather backpack with two shoulder straps, front pocket, and laptop compartment, practical daily use"
+        },
+        {
+          "id": "tote-bag",
+          "name": "Tote Bag",
+          "image": "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=400&h=400&fit=crop&q=80",
+          "prompt": "carrying large canvas tote bag with sturdy handles and open top, casual shopping everyday style"
+        },
+        {
+          "id": "messenger-bag",
+          "name": "Messenger",
+          "image": "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=400&fit=crop&q=80",
+          "prompt": "carrying brown leather messenger bag with long adjustable shoulder strap and flap closure, professional commuter style"
+        },
+        {
+          "id": "handbag",
+          "name": "Handbag",
+          "image": "https://images.unsplash.com/photo-1564422170194-896b89110ef8?w=400&h=400&fit=crop&q=80",
+          "prompt": "carrying designer leather handbag with structured shape, short handles, and elegant sophisticated style"
+        },
+        {
+          "id": "clutch",
+          "name": "Clutch",
+          "image": "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=400&h=400&fit=crop&q=80",
+          "prompt": "holding elegant evening clutch bag in hand, compact rectangular shape, formal party accessory"
+        }
+      ]
+    },
+    {
+      "id": "background",
+      "label": "Background",
+      "emoji": "🌆",
+      "description": "Locations, settings, environments",
+      "items": [
+        {
+          "id": "city-street",
+          "name": "City Street",
+          "image": "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=400&h=400&fit=crop&q=80",
+          "prompt": "standing on urban city street with modern buildings, sidewalk, and busy metropolitan atmosphere in background"
+        },
+        {
+          "id": "studio",
+          "name": "White Background",
+          "image": "https://www.ledr.com/colours/white.jpg",
+          "prompt": "in clean white photography studio with seamless white backdrop and professional lighting, minimal simple background"
+        },
+        {
+          "id": "park",
+          "name": "Park",
+          "image": "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=400&h=400&fit=crop&q=80",
+          "prompt": "standing in outdoor park with lush green trees, grass, and natural daylight, peaceful nature setting"
+        },
+        {
+          "id": "beach",
+          "name": "Beach",
+          "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=400&fit=crop&q=80",
+          "prompt": "at sandy beach with ocean waves, blue sky, and coastal scenery in background, tropical vacation vibes"
+        },
+        {
+          "id": "office",
+          "name": "Modern Office",
+          "image": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=400&fit=crop&q=80",
+          "prompt": "in contemporary office interior with desk, computer, bookshelves, and professional corporate environment"
+        },
+        {
+          "id": "cafe",
+          "name": "Cozy Cafe",
+          "image": "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=400&h=400&fit=crop&q=80",
+          "prompt": "inside cozy coffee shop with warm ambient lighting, wooden tables, and relaxed cafe atmosphere"
+        },
+        {
+          "id": "brick-wall",
+          "name": "Brick Wall",
+          "image": "https://images.unsplash.com/photo-1604079628040-94301bb21b91?w=400&h=400&fit=crop&q=80",
+          "prompt": "against exposed red brick wall background with urban industrial texture, street photography style"
+        },
+        {
+          "id": "sunset",
+          "name": "Sunset",
+          "image": "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?w=400&h=400&fit=crop&q=80",
+          "prompt": "during golden hour sunset with warm orange and pink sky colors, dramatic beautiful natural lighting"
+        }
+      ]
+    }
+  ]
+}

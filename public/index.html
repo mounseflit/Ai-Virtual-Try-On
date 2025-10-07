@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, user-scalable=no"
+  />
+  <title>Magic Fit Studio - AI Digital Try-On</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/enhancements.css" />
+  <link
+    rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>"
+  />
+</head>
+<body>
+  <div id="app" aria-live="polite">
+    <!-- Welcome Screen -->
+    <section id="welcome-screen" class="screen active" aria-hidden="false">
+      <div class="welcome-hero">
+        <!-- Left side: Hero content -->
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span class="badge-icon">✨</span>
+            <span class="badge-text">AI-Powered Fashion</span>
+          </div>
+          
+          <h1 class="hero-title">
+            Virtual Try-On
+            <span class="hero-title-highlight">Experience</span>
+          </h1>
+          
+          <p class="hero-description">
+            Transform your style in seconds. Capture your photo and try on endless outfits, 
+            accessories, and looks—all powered by cutting-edge AI technology.
+          </p>
+
+          <div class="hero-features">
+            <div class="hero-feature">
+              <span class="feature-icon">�</span>
+              <span class="feature-text">Instant Capture</span>
+            </div>
+            <div class="hero-feature">
+              <span class="feature-icon">👔</span>
+              <span class="feature-text">100+ Style Options</span>
+            </div>
+            <div class="hero-feature">
+              <span class="feature-icon">⚡</span>
+              <span class="feature-text">Real-time Results</span>
+            </div>
+          </div>
+
+          <button id="start-camera-btn" class="hero-cta-btn" aria-controls="camera-screen">
+            <span class="btn-content">
+              <span class="btn-icon">📸</span>
+              <span class="btn-text">Start Your Virtual Fitting</span>
+            </span>
+            <span class="btn-shine"></span>
+          </button>
+
+         
+        </div>
+
+        <!-- Right side: Visual showcase -->
+        <div class="hero-visual">
+          <div class="visual-grid">
+            <div class="visual-item visual-item-1">
+              <div class="visual-card">
+                <div class="visual-icon">👖</div>
+                <span class="visual-label">Lower Body</span>
+              </div>
+            </div>
+            <div class="visual-item visual-item-2">
+              <div class="visual-card">
+                <div class="visual-icon">👕</div>
+                <span class="visual-label">Upper Body</span>
+              </div>
+            </div>
+            <div class="visual-item visual-item-3">
+              <div class="visual-card">
+                <div class="visual-icon">🧥</div>
+                <span class="visual-label">Outerwear</span>
+              </div>
+            </div>
+            <div class="visual-item visual-item-4">
+              <div class="visual-card">
+                <div class="visual-icon">👟</div>
+                <span class="visual-label">Footwear</span>
+              </div>
+            </div>
+            <div class="visual-item visual-item-5">
+              <div class="visual-card">
+                <div class="visual-icon">👓</div>
+                <span class="visual-label">Eyewear</span>
+              </div>
+            </div>
+            <div class="visual-item visual-item-6">
+              <div class="visual-card">
+                <div class="visual-icon">🧢</div>
+                <span class="visual-label">Headwear</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Floating decoration elements -->
+          <!-- <div class="float-element float-1">✨</div>
+          <div class="float-element float-2">💫</div>
+          <div class="float-element float-3">⭐</div> -->
+        </div>
+      </div>
+
+      <!-- How it works section -->
+      <!-- <div class="how-it-works">
+        <h2 class="section-title">How It Works</h2>
+        <div class="steps-container">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-icon">📸</div>
+            <h3 class="step-title">Capture Photo</h3>
+            <p class="step-description">Take a full-body photo or upload an existing one</p>
+          </div>
+          <div class="step-arrow">→</div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-icon">🎨</div>
+            <h3 class="step-title">Choose Style</h3>
+            <p class="step-description">Select from 9 categories and 100+ preset options</p>
+          </div>
+          <div class="step-arrow">→</div>
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-icon">✨</div>
+            <h3 class="step-title">Get Results</h3>
+            <p class="step-description">AI generates your new look in seconds</p>
+          </div>
+        </div>
+      </div> -->
+    </section> 
+
+    <!-- Camera Screen -->
+    <section id="camera-screen" class="screen" aria-hidden="true" style="display: none;" >
+      <div class="camera-container">
+        <div class="camera-view">
+          <video id="camera-video" autoplay playsinline muted></video>
+          <canvas id="camera-canvas" style="display: none;"></canvas>
+
+          <!-- Body / fullbody shadow guide -->
+          <div class="body-overlay" aria-hidden="true">
+            <div class="body-shadow"></div>
+          </div>
+          
+          <!-- Countdown overlay -->
+          <div id="countdown-overlay" class="countdown-overlay" style="display: none;">
+            <div class="countdown-container">
+              <div class="countdown-number">5</div>
+              <div class="countdown-text">Look at the camera</div>
+            </div>
+          </div>
+
+          <!-- Camera error message -->
+          <div id="camera-error" class="camera-error" style="display: none;">
+            <div class="error-content">
+              <div class="error-icon">📷</div>
+              <h3>Camera Access Required</h3>
+              <p id="error-message">
+                Unable to access camera. Please check permissions and try again.
+              </p>
+              <div class="error-actions">
+                <button id="retry-camera-btn" class="btn btn-primary" hidden style="display: none;">Try Again</button>
+                <button id="upload-photo-btn" class="btn btn-secondary" hidden>Upload Photo Instead</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Camera controls -->
+        <div class="camera-controls">
+          <button id="back-to-welcome-btn" class="btn btn-secondary" hidden style="display: none;">Back</button>
+          <button id="switch-camera-btn" class="btn btn-icon" title="Switch camera" hidden style="display: none;">🔄</button>
+          <button id="capture-btn" class="capture-btn" title="Capture" hidden style="display: none;">📷</button>
+          <button id="upload-btn" class="btn btn-icon" title="Upload" hidden style="display: none;">📁</button>
+        </div>
+
+        <input type="file" id="file-input" accept="image/*" style="display: none;" />
+        <!-- <p class="camera-instruction">
+          Step back, align your full body with the shadow guide, and hold a pose. 📸
+        </p> -->
+      </div>
+    </section>
+
+    <!-- Try-On / Personalization Screen -->
+    <section id="character-screen" class="screen" aria-hidden="true" style="display: none;">
+      <div class="character-container-modern">
+        <!-- Left Panel: Avatar Preview + Selection Tags -->
+        <div class="avatar-panel">
+          <div class="avatar-preview-wrapper">
+            <img id="captured-image" src="" alt="Your avatar" class="avatar-image" />
+            <div class="preview-badge">✓</div>
+          </div>
+          
+          <div class="selection-tags-section">
+            <div class="tags-header">
+              <h3 class="tags-title">Your Selections</h3>
+              <span class="selection-count" id="selection-count">0</span>
+            </div>
+            <div id="selection-tags-list" class="selection-tags-list">
+              <!-- JS renders selection tags here -->
+            </div>
+          </div>
+
+          <div class="avatar-actions">
+            <button id="retake-photo-btn" class="btn-icon-text" style="text-align: center;">
+              <span class="icon">📸</span>
+              <span class="text">Retake</span>
+            </button>
+            <button id="finish-btn" class="btn-primary-large">
+              <span class="icon">✨</span>
+              <span class="text">Render Look</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Panel: Category Editor with Tabs -->
+        <div class="editor-panel">
+          
+
+          <!-- Category Tabs (wrapped for styling) -->
+          <div class="category-tabs-container">
+            <div class="category-tabs" id="category-tabs">
+              <!-- JS renders tabs here -->
+            </div>
+          </div>
+
+          <!-- Tab Content Panels (wrapped for styling) -->
+          <div class="tab-content-container">
+            <div class="tab-content-wrapper" id="tab-content-wrapper">
+              <!-- JS renders content panels here -->
+            </div>
+          </div>
+
+            <!-- General outfit prompt: override per-item prompts -->
+            <div class="general-prompt-section">
+              <label class="general-prompt-label" for="general-outfit-prompt">
+                <span class="label-icon">✨</span>
+                <span class="label-text">Or describe your complete outfit</span>
+              </label>
+
+              <textarea id="general-outfit-prompt" placeholder="Type a complete outfit description (e.g., 'Casual summer look: white linen shirt, blue denim shorts, brown sandals, straw hat') and we'll generate the entire look. Leave empty to use individual selections above." rows="3"></textarea>
+              <p class="hint">💡 This will override individual selections when filled. Clear it to use per-item picks.</p>
+            </div>
+        </div>
+      </div>
+
+      <!-- Hidden custom prompt field retained for compatibility -->
+      <input type="text" id="custom-prompt" style="display: none;" />
+    </section>
+
+    <!-- Loading Screen -->
+    <section id="loading-screen" class="screen" aria-hidden="true" style="display: none;">
+      <div class="loading-container">
+        <div class="loading-animation" aria-hidden="true">
+          <div class="magic-circle">
+            <div class="circle-outer"></div>
+            <div class="circle-inner"></div>
+            <div class="sparkle-icon">✨</div>
+          </div>
+        </div>
+        <h2 class="loading-title">Tailoring Your Look...</h2>
+        <p id="loading-message" class="loading-message">Mixing magical ingredients... 🧪</p>
+        <div class="loading-dots" aria-hidden="true">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+        <p class="loading-subtitle">Hold tight while we dress your avatar with every detail.</p>
+      </div>
+    </section>
+
+    <!-- Result Screen -->
+    <section id="result-screen" class="screen" aria-hidden="true">
+      <div class="result-container">
+        <h2 class="result-title">Your New Look! ✨</h2>
+
+        <div class="result-image-container">
+          <img id="result-image" src="" alt="Transformed image" />
+        </div>
+
+        <div class="result-actions">
+          <button id="transform-again-btn" class="btn btn-primary">🔄 Try Again</button>
+          <button id="share-result-btn" class="btn btn-secondary">📤 Share Result</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Share Modal -->
+    <div id="share-modal" class="modal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="share-title">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="share-title">📤 Share Your Transformation</h3>
+          <button id="close-modal-btn" class="close-btn" aria-label="Close">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="share-preview">
+            <img id="share-image" src="" alt="Share image preview" />
+          </div>
+
+          <div class="share-options">
+            <div class="share-option">
+              <h4>📧 Email</h4>
+              <div class="email-form">
+                <input type="email" id="email-input" placeholder="Enter your email address" />
+                <button id="send-email-btn" class="btn btn-primary">Send Email</button>
+              </div>
+            </div>
+
+            <div class="share-option">
+              <h4>📱 QR Code</h4>
+              <div class="qr-container">
+                <img id="qr-code" src="" alt="QR Code for image" />
+                <p>Scan with your phone to get the image</p>
+              </div>
+            </div>
+
+            <div class="share-option">
+              <h4>🔗 Direct Link</h4>
+              <div class="link-container">
+                <input type="text" id="share-link" readonly />
+                <button id="copy-link-btn" class="btn btn-secondaryy">Copy</button>
+              </div>
+            </div>
+
+            <div class="share-option">
+              <h4>🖨 Print</h4>
+              <button id="download-btn" class="btn btn-primary">Print Image</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Personalized Prompt Modal -->
+    <div id="personalized-modal" class="modal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="personalized-title">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="personalized-title">✨ Create Your Personalized Transformation</h3>
+          <button id="close-personalized-modal-btn" class="close-btn" aria-label="Close">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="personalized-form">
+            <label for="personalized-prompt">Describe your transformation:</label>
+            <textarea 
+              id="personalized-prompt" 
+              placeholder="Type any character or style (e.g., 'pirate captain with eye patch', 'elegant princess with crown', 'futuristic robot warrior'...)"
+              rows="4"
+            ></textarea>
+            <div class="prompt-examples">
+              <p><strong>Examples:</strong></p>
+              <div class="example-tags">
+                <span class="example-tag" onclick="document.getElementById('personalized-prompt').value = 'medieval knight with shining armor'">Medieval Knight</span>
+                <span class="example-tag" onclick="document.getElementById('personalized-prompt').value = 'space astronaut with cosmic helmet'">Space Astronaut</span>
+                <span class="example-tag" onclick="document.getElementById('personalized-prompt').value = 'pirate captain with treasure map'">Pirate Captain</span>
+                <span class="example-tag" onclick="document.getElementById('personalized-prompt').value = 'magical fairy with glowing wings'">Magical Fairy</span>
+              </div>
+            </div>
+            <div class="modal-actions">
+              <button id="cancel-personalized-btn" class="btn btn-secondary">Cancel</button>
+              <button id="continue-personalized-btn" class="btn btn-primary">Continue ✨</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Accessory Modal (inline) -->
+    <div id="accessory-modal" class="modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="accessory-title">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="accessory-title">Describe item</h3>
+          <button id="close-accessory-modal" class="close-btn" aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <label for="accessory-input">Custom description</label>
+          <input id="accessory-input" type="text" placeholder="e.g., black leather boots" />
+        </div>
+        <div class="modal-actions">
+          <button id="cancel-accessory-btn" class="btn btn-secondary">Cancel</button>
+          <button id="save-accessory-btn" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script defer src="js/app.js"></script>
+</body>
+</html>
