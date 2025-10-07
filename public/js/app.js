@@ -758,139 +758,165 @@ class MagicFaceTransform {
   }
 
   /* ---------- Camera lifecycle ---------- */
-  async startCamera() {
-    this.hideError();
-    console.log('[Camera] Starting camera initialization...');
+  // async startCamera() {
+  //   this.hideError();
+  //   console.log('[Camera] Starting camera initialization...');
 
-    const video = document.getElementById('camera-video');
-    if (!video) {
-      console.error('[Camera] Video element not found in DOM');
-      return;
-    }
+  //   const video = document.getElementById('camera-video');
+  //   if (!video) {
+  //     console.error('[Camera] Video element not found in DOM');
+  //     return;
+  //   }
 
-    // Check for browser support
-    if (!navigator.mediaDevices?.getUserMedia) {
-      console.error('[Camera] getUserMedia not supported');
-      this.showError('Camera is not supported on this device. Please upload a photo instead.');
-      await this.updateCameraControls({ streamAvailable: false });
-      return;
-    }
+  //   // Check for browser support
+  //   if (!navigator.mediaDevices?.getUserMedia) {
+  //     console.error('[Camera] getUserMedia not supported');
+  //     this.showError('Camera is not supported on this device. Please upload a photo instead.');
+  //     await this.updateCameraControls({ streamAvailable: false });
+  //     return;
+  //   }
 
-    // Stop any existing stream first
-    if (this.stream) {
-      console.log('[Camera] Stopping existing stream');
-      this.stream.getTracks().forEach(track => track.stop());
-      this.stream = null;
-    }
+  //   // Stop any existing stream first
+  //   if (this.stream) {
+  //     console.log('[Camera] Stopping existing stream');
+  //     this.stream.getTracks().forEach(track => track.stop());
+  //     this.stream = null;
+  //   }
 
-    // Reset video element state
-    video.srcObject = null;
-    video.load();
+  //   // Reset video element state
+  //   video.srcObject = null;
+  //   video.load();
 
-    // Base constraints with fallback strategies
-    const constraintStrategies = [
-      // Strategy 1: Try with facingMode
-      {
-        audio: false,
-        video: {
-          width: { ideal: 720 },
-          height: { ideal: 1280 },
-          facingMode: { ideal: this.facingMode }
-        }
-      },
-      // Strategy 2: Try opposite facingMode
-      {
-        audio: false,
-        video: {
-          width: { ideal: 720 },
-          height: { ideal: 1280 },
-          facingMode: { ideal: this.facingMode === 'environment' ? 'user' : 'environment' }
-        }
-      },
-      // Strategy 3: Try without facingMode but with dimensions
-      {
-        audio: false,
-        video: {
-          width: { ideal: 720 },
-          height: { ideal: 1280 }
-        }
-      },
-      // Strategy 4: Basic constraints only
-      {
-        audio: false,
-        video: true
-      }
-    ];
+  //   // Base constraints with fallback strategies
+  //   const constraintStrategies = [
+  //     // Strategy 1: Try with facingMode
+  //     {
+  //       audio: false,
+  //       video: {
+  //         width: { ideal: 720 },
+  //         height: { ideal: 1280 },
+  //         facingMode: { ideal: this.facingMode }
+  //       }
+  //     },
+  //     // Strategy 2: Try opposite facingMode
+  //     {
+  //       audio: false,
+  //       video: {
+  //         width: { ideal: 720 },
+  //         height: { ideal: 1280 },
+  //         facingMode: { ideal: this.facingMode === 'environment' ? 'user' : 'environment' }
+  //       }
+  //     },
+  //     // Strategy 3: Try without facingMode but with dimensions
+  //     {
+  //       audio: false,
+  //       video: {
+  //         width: { ideal: 720 },
+  //         height: { ideal: 1280 }
+  //       }
+  //     },
+  //     // Strategy 4: Basic constraints only
+  //     {
+  //       audio: false,
+  //       video: true
+  //     }
+  //   ];
 
-    let lastError = null;
+  //   let lastError = null;
 
-    for (let i = 0; i < constraintStrategies.length; i++) {
-      const constraints = constraintStrategies[i];
-      console.log(`[Camera] Trying constraint strategy ${i + 1}:`, JSON.stringify(constraints));
+  //   for (let i = 0; i < constraintStrategies.length; i++) {
+  //     const constraints = constraintStrategies[i];
+  //     console.log(`[Camera] Trying constraint strategy ${i + 1}:`, JSON.stringify(constraints));
 
-      try {
-        // Request camera access
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        console.log('[Camera] Stream obtained successfully', stream.getTracks().map(t => ({
-          kind: t.kind,
-          label: t.label,
-          enabled: t.enabled,
-          readyState: t.readyState
-        })));
+  //     try {
+  //       // Request camera access
+  //       const stream = await navigator.mediaDevices.getUserMedia(constraints);
+  //       console.log('[Camera] Stream obtained successfully', stream.getTracks().map(t => ({
+  //         kind: t.kind,
+  //         label: t.label,
+  //         enabled: t.enabled,
+  //         readyState: t.readyState
+  //       })));
 
-        this.stream = stream;
+  //       this.stream = stream;
 
-        // Configure video element
-        video.srcObject = stream;
-        video.setAttribute('playsinline', '');
-        video.setAttribute('webkit-playsinline', '');
-        video.setAttribute('muted', '');
-        video.muted = true;
-        video.playsInline = true;
-        video.defaultMuted = true;
+  //       // Configure video element
+  //       video.srcObject = stream;
+  //       video.setAttribute('playsinline', '');
+  //       video.setAttribute('webkit-playsinline', '');
+  //       video.setAttribute('muted', '');
+  //       video.muted = true;
+  //       video.playsInline = true;
+  //       video.defaultMuted = true;
 
-        console.log('[Camera] Video element configured, waiting for metadata...');
+  //       console.log('[Camera] Video element configured, waiting for metadata...');
 
-        // Wait for video metadata to load
-        await this.waitForVideoReady(video);
-        console.log('[Camera] Video metadata loaded:', {
-          videoWidth: video.videoWidth,
-          videoHeight: video.videoHeight,
-          readyState: video.readyState
-        });
+  //       // Wait for video metadata to load
+  //       await this.waitForVideoReady(video);
+  //       console.log('[Camera] Video metadata loaded:', {
+  //         videoWidth: video.videoWidth,
+  //         videoHeight: video.videoHeight,
+  //         readyState: video.readyState
+  //       });
 
-        // Attempt to play
-        try {
-          await video.play();
-          console.log('[Camera] Video playing successfully');
-        } catch (playError) {
-          console.warn('[Camera] Auto-play failed, attempting manual play:', playError);
-          // Some browsers require user interaction, but we'll try anyway
-          video.play().catch(e => console.warn('[Camera] Manual play also failed:', e));
-        }
+  //       // Attempt to play
+  //       try {
+  //         await video.play();
+  //         console.log('[Camera] Video playing successfully');
+  //       } catch (playError) {
+  //         console.warn('[Camera] Auto-play failed, attempting manual play:', playError);
+  //         // Some browsers require user interaction, but we'll try anyway
+  //         video.play().catch(e => console.warn('[Camera] Manual play also failed:', e));
+  //       }
 
-        // Update UI controls
-        await this.updateCameraControls({ streamAvailable: true });
-        console.log('[Camera] Camera started successfully');
-        return;
+  //       // Update UI controls
+  //       await this.updateCameraControls({ streamAvailable: true });
+  //       console.log('[Camera] Camera started successfully');
+  //       return;
 
-      } catch (error) {
-        lastError = error;
-        console.error(`[Camera] Strategy ${i + 1} failed:`, error.name, error.message);
+  //     } catch (error) {
+  //       lastError = error;
+  //       console.error(`[Camera] Strategy ${i + 1} failed:`, error.name, error.message);
         
-        // Clean up failed attempt
-        if (this.stream) {
-          this.stream.getTracks().forEach(track => track.stop());
-          this.stream = null;
-        }
-      }
-    }
+  //       // Clean up failed attempt
+  //       if (this.stream) {
+  //         this.stream.getTracks().forEach(track => track.stop());
+  //         this.stream = null;
+  //       }
+  //     }
+  //   }
 
-    // All strategies failed
-    console.error('[Camera] All strategies failed. Last error:', lastError);
-    this.showError('Unable to access camera. Please check permissions and try again.');
-    await this.updateCameraControls({ streamAvailable: false });
+  //   // All strategies failed
+  //   console.error('[Camera] All strategies failed. Last error:', lastError);
+  //   this.showError('Unable to access camera. Please check permissions and try again.');
+  //   await this.updateCameraControls({ streamAvailable: false });
+  // }
+
+    async startCamera() {
+    try {
+      this.hideError();
+      if (this.stream) {
+        this.stream.getTracks().forEach(t => t.stop());
+        this.stream = null;
+      }
+
+      const constraints = {
+        video: { facingMode: this.facingMode, width: { ideal: 1280 }, height: { ideal: 720 } },
+        audio: false
+      };
+
+      this.stream = await navigator.mediaDevices.getUserMedia(constraints);
+      const video = document.getElementById('camera-video');
+      video.srcObject = this.stream;
+      
+      await this.updateCameraControls({ streamAvailable: true });
+    } catch (error) {
+      console.error('Camera access failed:', error);
+      this.showError('Unable to access camera. Please check permissions and try again.');
+      await this.updateCameraControls({ streamAvailable: false });
+    }
   }
+
 
   stopCamera() {
     // Clear countdown interval if it exists
