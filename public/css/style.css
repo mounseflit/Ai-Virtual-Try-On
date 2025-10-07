@@ -32,7 +32,7 @@ body {
     opacity: 0;
     visibility: hidden;
     transition: all 0.5s ease-in-out;
-    padding: 20px;
+    padding: 0px;
 }
 
 .screen.active {
@@ -513,6 +513,10 @@ body {
     height: 100%;
     object-fit: cover;
     display: block;
+    background-color: #000;
+    /* Ensure video is visible and not masked */
+    position: relative;
+    z-index: 1;
 }
 
 .body-overlay {
@@ -525,6 +529,7 @@ body {
     pointer-events: none;
     display: block;
     filter: blur(14px) opacity(0.85);
+    z-index: 2;
 }
 
 .body-shadow {

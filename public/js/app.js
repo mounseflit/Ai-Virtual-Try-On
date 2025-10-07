@@ -155,9 +155,17 @@ class MagicFaceTransform {
 
       this.navigateTo('camera', {
         before: async () => {
+          // Small delay to ensure screen is visible before starting camera
+          await new Promise(resolve => setTimeout(resolve, 100));
+          console.log('[Navigation] Starting camera from welcome screen');
           await this.startCamera();
           // Start countdown after camera is initialized
-          setTimeout(() => this.startCountdown(), 1000);
+          setTimeout(() => {
+            if (this.stream) {
+              console.log('[Navigation] Starting countdown');
+              this.startCountdown();
+            }
+          }, 1000);
         }
       });
 
@@ -198,6 +206,7 @@ class MagicFaceTransform {
     });
 
     document.getElementById('retry-camera-btn').addEventListener('click', () => {
+      console.log('[Navigation] Retry camera button clicked');
       this.startCamera();
       document.getElementById("welcome-screen").style.display = "none";
       document.getElementById("character-screen").style.display = "none";
@@ -217,9 +226,15 @@ class MagicFaceTransform {
     document.getElementById('retake-photo-btn').addEventListener('click', () => {
       this.navigateTo('camera', { 
       before: async () => {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        console.log('[Navigation] Retaking photo');
         await this.startCamera();
         // Start countdown after camera is initialized
-        setTimeout(() => this.startCountdown(), 1000);
+        setTimeout(() => {
+          if (this.stream) {
+            this.startCountdown();
+          }
+        }, 1000);
       }
       });
       document.getElementById("welcome-screen").style.display = "none";
@@ -744,26 +759,137 @@ class MagicFaceTransform {
 
   /* ---------- Camera lifecycle ---------- */
   async startCamera() {
-    try {
-      this.hideError();
-      if (this.stream) {
-        this.stream.getTracks().forEach(t => t.stop());
-        this.stream = null;
-      }
+    this.hideError();
+    console.log('[Camera] Starting camera initialization...');
 
-      // Prefer vertical fullbody capture: request taller video when available
-      const constraints = {
-        video: { facingMode: this.facingMode, width: { ideal: 720 }, height: { ideal: 1280 } },
-        audio: false
-      };
-
-      this.stream = await navigator.mediaDevices.getUserMedia(constraints);
-      const video = document.getElementById('camera-video');
-      video.srcObject = this.stream;
-    } catch (error) {
-      console.error('Camera error:', error);
-      this.showError('Unable to access camera. Please check permissions and try again.');
+    const video = document.getElementById('camera-video');
+    if (!video) {
+      console.error('[Camera] Video element not found in DOM');
+      return;
     }
+
+    // Check for browser support
+    if (!navigator.mediaDevices?.getUserMedia) {
+      console.error('[Camera] getUserMedia not supported');
+      this.showError('Camera is not supported on this device. Please upload a photo instead.');
+      await this.updateCameraControls({ streamAvailable: false });
+      return;
+    }
+
+    // Stop any existing stream first
+    if (this.stream) {
+      console.log('[Camera] Stopping existing stream');
+      this.stream.getTracks().forEach(track => track.stop());
+      this.stream = null;
+    }
+
+    // Reset video element state
+    video.srcObject = null;
+    video.load();
+
+    // Base constraints with fallback strategies
+    const constraintStrategies = [
+      // Strategy 1: Try with facingMode
+      {
+        audio: false,
+        video: {
+          width: { ideal: 720 },
+          height: { ideal: 1280 },
+          facingMode: { ideal: this.facingMode }
+        }
+      },
+      // Strategy 2: Try opposite facingMode
+      {
+        audio: false,
+        video: {
+          width: { ideal: 720 },
+          height: { ideal: 1280 },
+          facingMode: { ideal: this.facingMode === 'environment' ? 'user' : 'environment' }
+        }
+      },
+      // Strategy 3: Try without facingMode but with dimensions
+      {
+        audio: false,
+        video: {
+          width: { ideal: 720 },
+          height: { ideal: 1280 }
+        }
+      },
+      // Strategy 4: Basic constraints only
+      {
+        audio: false,
+        video: true
+      }
+    ];
+
+    let lastError = null;
+
+    for (let i = 0; i < constraintStrategies.length; i++) {
+      const constraints = constraintStrategies[i];
+      console.log(`[Camera] Trying constraint strategy ${i + 1}:`, JSON.stringify(constraints));
+
+      try {
+        // Request camera access
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        console.log('[Camera] Stream obtained successfully', stream.getTracks().map(t => ({
+          kind: t.kind,
+          label: t.label,
+          enabled: t.enabled,
+          readyState: t.readyState
+        })));
+
+        this.stream = stream;
+
+        // Configure video element
+        video.srcObject = stream;
+        video.setAttribute('playsinline', '');
+        video.setAttribute('webkit-playsinline', '');
+        video.setAttribute('muted', '');
+        video.muted = true;
+        video.playsInline = true;
+        video.defaultMuted = true;
+
+        console.log('[Camera] Video element configured, waiting for metadata...');
+
+        // Wait for video metadata to load
+        await this.waitForVideoReady(video);
+        console.log('[Camera] Video metadata loaded:', {
+          videoWidth: video.videoWidth,
+          videoHeight: video.videoHeight,
+          readyState: video.readyState
+        });
+
+        // Attempt to play
+        try {
+          await video.play();
+          console.log('[Camera] Video playing successfully');
+        } catch (playError) {
+          console.warn('[Camera] Auto-play failed, attempting manual play:', playError);
+          // Some browsers require user interaction, but we'll try anyway
+          video.play().catch(e => console.warn('[Camera] Manual play also failed:', e));
+        }
+
+        // Update UI controls
+        await this.updateCameraControls({ streamAvailable: true });
+        console.log('[Camera] Camera started successfully');
+        return;
+
+      } catch (error) {
+        lastError = error;
+        console.error(`[Camera] Strategy ${i + 1} failed:`, error.name, error.message);
+        
+        // Clean up failed attempt
+        if (this.stream) {
+          this.stream.getTracks().forEach(track => track.stop());
+          this.stream = null;
+        }
+      }
+    }
+
+    // All strategies failed
+    console.error('[Camera] All strategies failed. Last error:', lastError);
+    this.showError('Unable to access camera. Please check permissions and try again.');
+    await this.updateCameraControls({ streamAvailable: false });
   }
 
   stopCamera() {
@@ -779,11 +905,82 @@ class MagicFaceTransform {
       this.stream.getTracks().forEach(track => track.stop());
       this.stream = null;
     }
+
+    this.updateCameraControls({ streamAvailable: false });
   }
 
   switchCamera() {
     this.facingMode = this.facingMode === 'user' ? 'environment' : 'user';
     this.startCamera();
+  }
+
+  async waitForVideoReady(video) {
+    if (!video) {
+      console.error('[Camera] waitForVideoReady: video element is null');
+      return;
+    }
+    
+    console.log('[Camera] Current readyState:', video.readyState);
+    
+    // readyState >= 2 means HAVE_CURRENT_DATA or better
+    if (video.readyState >= 2) {
+      console.log('[Camera] Video already ready');
+      return;
+    }
+
+    // Wait for metadata with timeout
+    return new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        video.removeEventListener('loadedmetadata', metadataHandler);
+        video.removeEventListener('loadeddata', dataHandler);
+        console.warn('[Camera] Video metadata load timeout');
+        resolve(); // Don't reject, continue anyway
+      }, 10000); // 10 second timeout
+
+      const metadataHandler = () => {
+        clearTimeout(timeout);
+        video.removeEventListener('loadeddata', dataHandler);
+        console.log('[Camera] Metadata loaded event fired');
+        resolve();
+      };
+
+      const dataHandler = () => {
+        clearTimeout(timeout);
+        video.removeEventListener('loadedmetadata', metadataHandler);
+        console.log('[Camera] Data loaded event fired');
+        resolve();
+      };
+
+      video.addEventListener('loadedmetadata', metadataHandler, { once: true });
+      video.addEventListener('loadeddata', dataHandler, { once: true });
+    });
+  }
+
+  async updateCameraControls({ streamAvailable = false } = {}) {
+    const toggleControl = (id, visible) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.hidden = !visible;
+      el.style.display = visible ? '' : 'none';
+    };
+
+    toggleControl('capture-btn', streamAvailable);
+    toggleControl('upload-btn', true);
+    toggleControl('back-to-welcome-btn', true);
+
+    if (!navigator.mediaDevices?.enumerateDevices) {
+      toggleControl('switch-camera-btn', false);
+      return;
+    }
+
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const videoInputs = devices.filter(device => device.kind === 'videoinput');
+      toggleControl('switch-camera-btn', streamAvailable && videoInputs.length > 1);
+    } catch (error) {
+      console.warn('Unable to enumerate devices for camera switch:', error);
+      toggleControl('switch-camera-btn', false);
+    }
   }
 
   /* ---------- Capture / Upload ---------- */
@@ -889,11 +1086,7 @@ class MagicFaceTransform {
   }
 
   buildTryOnPrompt() {
-    // If general outfit prompt has text, use it (automatic override)
-    if (this.generalOutfitPrompt && this.generalOutfitPrompt.trim().length > 0) {
-      return this.generalOutfitPrompt.trim();
-    }
-
+    
     // Otherwise build prompt from per-item selections (fallback to custom-prompt if present)
     const directives = [];
     if (this.accessorySelections) {
@@ -906,6 +1099,13 @@ class MagicFaceTransform {
     }
     const custom = (document.getElementById('custom-prompt') || {}).value || '';
     if (custom.trim()) directives.push(`Additional direction: ${custom.trim()}`);
+
+    // If general outfit prompt has text, use it (no override, add it to the others) : this.generalOutfitPrompt
+
+    if (this.generalOutfitPrompt && this.generalOutfitPrompt.trim().length > 0) {
+      directives.push(this.generalOutfitPrompt.trim());
+    }
+
     return directives.join('; ');
   }
 

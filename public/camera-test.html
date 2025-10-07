@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Debug Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        video {
+            width: 100%;
+            max-width: 400px;
+            background: #000;
+            border: 2px solid #333;
+            border-radius: 8px;
+            display: block;
+            margin: 20px auto;
+        }
+        button {
+            padding: 12px 24px;
+            margin: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 6px;
+            background: #667eea;
+            color: white;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        .log {
+            background: #2a2a2a;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .log-entry {
+            padding: 4px 0;
+            border-bottom: 1px solid #333;
+        }
+        .log-error {
+            color: #ff6b6b;
+        }
+        .log-success {
+            color: #51cf66;
+        }
+        .log-info {
+            color: #74c0fc;
+        }
+        .status {
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 6px;
+            background: #2a2a2a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎥 Camera Debug Test</h1>
+        <p>This page tests camera access with detailed logging to identify browser compatibility issues.</p>
+        
+        <div class="status" id="status">Status: Ready to test</div>
+        
+        <div>
+            <button onclick="testCamera()">Test Camera Access</button>
+            <button onclick="stopCamera()">Stop Camera</button>
+            <button onclick="clearLogs()">Clear Logs</button>
+        </div>
+        
+        <video id="testVideo" autoplay playsinline muted></video>
+        
+        <div class="log" id="logContainer"></div>
+    </div>
+
+    <script>
+        let stream = null;
+        const video = document.getElementById('testVideo');
+        const logContainer = document.getElementById('logContainer');
+        const statusDiv = document.getElementById('status');
+
+        function log(message, type = 'info') {
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logContainer.insertBefore(entry, logContainer.firstChild);
+            console.log(message);
+        }
+
+        function setStatus(message, isError = false) {
+            statusDiv.textContent = `Status: ${message}`;
+            statusDiv.style.background = isError ? '#c92a2a' : '#2a2a2a';
+        }
+
+        function clearLogs() {
+            logContainer.innerHTML = '';
+            log('Logs cleared', 'info');
+        }
+
+        async function testCamera() {
+            log('=== Starting Camera Test ===', 'info');
+            setStatus('Testing camera...');
+
+            // Check browser support
+            log(`Browser: ${navigator.userAgent}`, 'info');
+            log(`MediaDevices supported: ${!!navigator.mediaDevices}`, 'info');
+            log(`getUserMedia supported: ${!!navigator.mediaDevices?.getUserMedia}`, 'info');
+
+            if (!navigator.mediaDevices?.getUserMedia) {
+                log('ERROR: getUserMedia not supported by this browser', 'error');
+                setStatus('Camera not supported', true);
+                return;
+            }
+
+            // Stop existing stream
+            if (stream) {
+                log('Stopping existing stream', 'info');
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+                video.srcObject = null;
+            }
+
+            // Test different constraint strategies
+            const strategies = [
+                {
+                    name: 'Strategy 1: With facingMode environment',
+                    constraints: {
+                        audio: false,
+                        video: {
+                            width: { ideal: 720 },
+                            height: { ideal: 1280 },
+                            facingMode: { ideal: 'environment' }
+                        }
+                    }
+                },
+                {
+                    name: 'Strategy 2: With facingMode user',
+                    constraints: {
+                        audio: false,
+                        video: {
+                            width: { ideal: 720 },
+                            height: { ideal: 1280 },
+                            facingMode: { ideal: 'user' }
+                        }
+                    }
+                },
+                {
+                    name: 'Strategy 3: Without facingMode',
+                    constraints: {
+                        audio: false,
+                        video: {
+                            width: { ideal: 720 },
+                            height: { ideal: 1280 }
+                        }
+                    }
+                },
+                {
+                    name: 'Strategy 4: Basic video only',
+                    constraints: {
+                        audio: false,
+                        video: true
+                    }
+                }
+            ];
+
+            for (let i = 0; i < strategies.length; i++) {
+                const strategy = strategies[i];
+                log(`Trying ${strategy.name}`, 'info');
+                log(`Constraints: ${JSON.stringify(strategy.constraints)}`, 'info');
+
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia(strategy.constraints);
+                    log('✓ Stream obtained!', 'success');
+                    
+                    const tracks = stream.getTracks();
+                    log(`Tracks: ${tracks.length}`, 'success');
+                    tracks.forEach((track, idx) => {
+                        log(`  Track ${idx}: ${track.kind} - ${track.label} (enabled: ${track.enabled}, state: ${track.readyState})`, 'success');
+                    });
+
+                    // Configure video element
+                    video.srcObject = stream;
+                    video.setAttribute('playsinline', '');
+                    video.setAttribute('webkit-playsinline', '');
+                    video.muted = true;
+                    video.playsInline = true;
+                    
+                    log('Waiting for video metadata...', 'info');
+                    
+                    await new Promise((resolve, reject) => {
+                        const timeout = setTimeout(() => {
+                            log('⚠ Metadata load timeout', 'error');
+                            resolve();
+                        }, 5000);
+
+                        video.addEventListener('loadedmetadata', () => {
+                            clearTimeout(timeout);
+                            log(`✓ Metadata loaded: ${video.videoWidth}x${video.videoHeight}`, 'success');
+                            resolve();
+                        }, { once: true });
+                    });
+
+                    // Try to play
+                    try {
+                        await video.play();
+                        log('✓ Video playing!', 'success');
+                        setStatus('Camera working! ✓');
+                        return;
+                    } catch (playError) {
+                        log(`⚠ Play failed: ${playError.name} - ${playError.message}`, 'error');
+                        // Try without await
+                        video.play().catch(e => log(`Manual play also failed: ${e.message}`, 'error'));
+                    }
+
+                    log('✓ Camera started successfully', 'success');
+                    setStatus('Camera working! ✓');
+                    return;
+
+                } catch (error) {
+                    log(`✗ ${strategy.name} failed: ${error.name} - ${error.message}`, 'error');
+                    if (stream) {
+                        stream.getTracks().forEach(track => track.stop());
+                        stream = null;
+                    }
+                }
+            }
+
+            log('=== All strategies failed ===', 'error');
+            setStatus('All camera strategies failed', true);
+        }
+
+        function stopCamera() {
+            if (stream) {
+                log('Stopping camera stream', 'info');
+                stream.getTracks().forEach(track => {
+                    log(`  Stopping track: ${track.kind}`, 'info');
+                    track.stop();
+                });
+                stream = null;
+                video.srcObject = null;
+                setStatus('Camera stopped');
+            } else {
+                log('No active stream to stop', 'info');
+            }
+        }
+
+        // Auto-test on load (optional)
+        // setTimeout(() => testCamera(), 500);
+    </script>
+</body>
+</html>
